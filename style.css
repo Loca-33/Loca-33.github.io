@@ -7,6 +7,13 @@
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}}
 @media print{.site-header,.hero-actions,.hero-bottom,footer{display:none}.container{width:100%}.section{padding:24px 0}.hero{padding-top:0}.portrait img{height:280px}body{background:white}details{display:block}article{break-inside:avoid}}
 
+/* Repository metadata is untrusted text and may contain long names. */
+.projects-status{font-size:12px;color:var(--muted);margin-bottom:26px}
+.repo-card{padding-bottom:34px}
+.repo-card h3,.repo-card p,.repo-card .tags,.repo-card .project-meta{overflow-wrap:anywhere;min-width:0}
+.repo-card h3 a:hover{color:var(--accent)}
+.repo-card .project-meta>span:first-child{font-size:22px}
+.repo-card .project-content>.text-link{margin-top:18px}
 /* English typography and restrained navy / charcoal finish. */
 .hero{grid-template-columns:1.3fr 1fr}.hero-copy,.section-body,.project-content{min-width:0}
 h1 em{font-style:normal;color:var(--ink)}h1{font-size:clamp(76px,7.5vw,104px)}

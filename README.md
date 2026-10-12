@@ -8,9 +8,9 @@
 
 ```text
 Loca-33.github.io/
-├── index.html          首页内容（修改个人信息、项目、邮箱等）
+├── index.html          首页内容（修改个人信息、邮箱等）
 ├── style.css           样式、颜色、桌面与手机布局
-├── script.js           导航高亮、自动年份
+├── script.js           导航高亮、自动年份、GitHub 公开仓库同步
 ├── .nojekyll           空文件，关闭 GitHub Pages 的 Jekyll 处理
 ├── README.md           本说明
 └── assets/
@@ -75,7 +75,7 @@ git push
 
 ## 5 发布前检查内容
 
-- 内容按本次提供的最新简历整理：关注大模型应用、RAG、Agent、Skill 优化，项目仅展示本份简历中的美赛。关注领域并不表示已有上线成果。
+- 内容按本次提供的最新简历整理：关注大模型应用、RAG、Agent、Skill 优化，项目区改为读取 GitHub 公开仓库，不再保留手写美赛条目。关注领域并不表示已有上线成果。
 - 没有沿用参考网站作者的个人信息、论文链接、项目图片，也没有沿用旧版简历的研究条目。本站独立实现，只参考单页内容组织。
 - 英文姓名暂用 `Chuhan Wang`；如有惯用拼写，可在标题、首屏、照片注释和页脚一并更换。
 - 个人照片会在公开网站展示。当前邮箱 `hujisheng132@gmail.com` 来自新简历；如果不希望公开，删除 footer 中对应的 mailto 链接。公开邮箱可能收到垃圾邮件。
@@ -93,21 +93,31 @@ git push
 | home | 英文名、姓名、首页简介和照片 |
 | about | 个人介绍 |
 | interests | 当前关注方向 |
-| projects | 项目，复制 article.project 可新增一项 |
+| projects | 自动读取 GitHub 的项目容器，不要手动复制卡片 |
 | experience | 教育、校园经历、技术栈 |
 | honors | 奖项 |
 | contact | 邮箱、GitHub |
 
 编辑 GitHub 网页中的文件（铅笔图标）并 Commit changes，或者在本地修改后 Push，Pages 会自动重新部署。纯 HTML 内容无需修改 JavaScript。
 
-### 添加项目链接
-确认链接可以公开后，在对应项目中加入：
+### GitHub 项目自动同步
 
-```html
-<a class="text-link" href="你的真实项目链接" target="_blank" rel="noopener noreferrer">项目源码 ↗</a>
-```
+项目区在每次打开或刷新页面时，通过 GitHub 公共 API 获取 Loca-33 名下的全部公开仓库（支持分页），按最近更新时间排序；排除个人主页仓库 Loca-33.github.io。Fork 和归档仓库也展示，并标注 Fork / Archived。不会获取私有仓库、别人名下你参与的仓库、置顶顺序或 README 正文。
 
-不要使用 `href="#"` 充当未完成按钮。未公开成果直接不显示链接即可。
+- 新增/删除公开仓库、仓库改名或转为私有：下次成功加载时反映在页面。
+- 名称来自仓库名；简介来自仓库 About → Description；标签来自 Topics；主要语言由 GitHub 判定。
+- 仓库没有 Description 时会显示英文缺省提示。建议在仓库首页右侧 About 齿轮中填写英文 Description 和 Topics，让主页风格统一。仓库名称和简介原样展示，不自动翻译中文。
+- 不需要重新上传主页代码来更新项目资料；但已打开的页面不会持续轮询，需要刷新。
+- 本方案展示仓库元信息，不会把项目本身自动部署成在线 Demo。
+- 原手写的美赛项目介绍已经移除。如果希望它展示，需要在账号下有对应公开仓库。公开前检查数据、论文及个人信息是否适合发布。
+
+无需 Token、后端或额外 Actions。不要将 GitHub Token 写到网页。每次访问会从访客浏览器请求 api.github.com，GitHub 会接收该请求及通常的网络信息。匿名 API 通常限制为每个来源 IP 每小时 60 次请求；共享网络、网络阻断或 GitHub 服务故障可能导致加载失败，此时展示英文提示和仓库列表链接，不显示旧项目。API 的元数据也可能有短暂更新延迟。
+
+如需展示主页仓库，在 script.js 中将 EXCLUDED_REPOS 改为 []；如需排除其他仓库，将对应仓库名（小写）加入该数组。
+
+### 更新现有网站
+
+将本版 index.html、style.css、script.js、README.md 上传到原主页仓库根目录覆盖同名文件，再 Commit changes。assets/ 和 .nojekyll 没变，不需要重新上传；Pages 仍用 main / (root)，不需要改设置。部署完成后强制刷新查看。
 
 ### 修改照片
 替换 assets/portrait.jpg，文件名保持不变。页面默认按竖幅裁切，可在 style.css 的 `.portrait img` 调整 object-position。请保留或更新 HTML 中图片 width/height 以匹配新照片尺寸，并先移除 EXIF 位置等元数据。不要上传参考作者的 portal.png。
@@ -130,8 +140,8 @@ git push
 - **没有样式或照片**：保留目录结构，不要用 F:/ 或 C:/ 本地路径；文件名区分大小写。
 - **旧内容没更新**：等部署成功后 Ctrl+F5 强制刷新。
 - **手机布局**：已设计窄屏布局；导航在手机端显示第二行，不需要菜单脚本。
-- **项目详情**：点击“查看方法与工作内容”展开，也可以键盘 Tab 聚焦后按 Enter/Space。
-- **无 JavaScript**：正文、锚点导航和原生 details 展开仍可使用，只没有动态年份与导航高亮。
+- **项目未显示**：确认仓库为 Public、不是主页仓库，检查网络能否访问 api.github.com；限流时稍后重试，或通过页面链接直接查看 GitHub。
+- **无 JavaScript**：个人介绍和导航可阅读，项目区显示 GitHub 链接；自动加载仓库需要 JavaScript 和网络。
 
 ## 交付边界
 
