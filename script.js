@@ -1,8 +1,12 @@
 'use strict';
 // Static content and GitHub fallback links work without JavaScript.
-document.getElementById('year').textContent = new Date().getFullYear();
+const yearNode = document.getElementById('year');
+if (yearNode) yearNode.textContent = new Date().getFullYear();
 const links = [...document.querySelectorAll('nav a')];
-const sections = links.map(link => document.querySelector(link.getAttribute('href')));
+const sections = links.map(link => {
+  const href = link.getAttribute('href');
+  return href && href.startsWith('#') ? document.getElementById(href.slice(1)) : null;
+}).filter(Boolean);
 let scheduled = false;
 function updateNavigation() {
   const position = window.scrollY + 180;
